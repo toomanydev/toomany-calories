@@ -105,6 +105,14 @@ label{
     padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
+/* Disable focus highlighting */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline-width: 0;
+}
+
 /* Hide arrows on the number inputs*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
