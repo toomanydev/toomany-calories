@@ -42,11 +42,10 @@ label{
     color: rgb(117,117,117);
     font-size: 1.5rem;
 }
+
 .inputGroup{
     position: relative;
 }
-
-
 .numberInput, .timeInput, .buttonInput{
     background: rgb(35, 35, 35);
     border: 1px solid;
@@ -69,10 +68,15 @@ label{
     color: rgb(117,117,117);
 }
 
+#currentTime {
+    margin: 1rem;
+    margin-bottom: 0.25rem;
+}
 #availableCalories{
     font-size: 2em;
     font-weight: bold;
-    margin: 0.5em;
+    margin: 1rem;
+    margin-top: 0.25rem;
 }
 
 /* Make the inputs look better by "connecting" where they touch */
