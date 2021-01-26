@@ -12,8 +12,14 @@
     <h2>toomany</h2>
     <h1>Calories</h1>
     <div id="app">
-      <input type="number" id="calorieTarget" class="numberInput" placeholder="Calorie Target">
-      <input type="number" id="alreadyConsumed" class="numberInput" placeholder="Already Consumed"><br>
+      <div class="inputGroup">
+        <input type="number" id="calorieTarget" class="numberInput">
+        <label for="calorieTarget">Calorie Target</label>
+      </div>
+      <div class="inputGroup">
+        <input type="number" id="alreadyConsumed" class="numberInput"><br>
+        <label for="alreadyConsumed">Breakfast</label>
+      </div>
       <input type="time" id="startTime" class="timeInput" value="08:00"><!--
       --><input type="button" id="goButton" class="buttonInput" value="Go"><!--
 --><input type="time" id="bedTime" class="timeInput" value="23:00">
