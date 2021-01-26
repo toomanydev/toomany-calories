@@ -77,11 +77,19 @@ input {
     border-top-right-radius: 0;
     border-top-width: 0;
 }
+#startTime{
+    border-right-width: 0;
+    border-bottom-right-radius: 0;
+}
+#bedTime{
+    border-left-width: 0;
+    border-bottom-left-radius: 0;
+}
 #goButton{
     border-top-width: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    padding: 0 0.5rem 0.2rem 0.5rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
 /* Hide arrows on the number inputs*/
