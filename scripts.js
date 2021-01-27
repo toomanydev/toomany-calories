@@ -12,7 +12,7 @@ var calorieConsumptions; // list of calories consumed after starting, i.e. exclu
 // Main
 main();
 function main() {
-    
+
 }
 
 // Functions
@@ -21,6 +21,11 @@ function getInputValues(){
     breakfastCalories = getBreakfastCalories();
     startTime = getStartTime();
     bedTime = getBedTime();
+}
+
+// Events
+function goButton(){
+    console.log(getCalorieTarget());
 }
 
 function getCalorieTarget(){
