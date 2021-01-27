@@ -61,12 +61,14 @@ label{
     width:300px;
 }
 .timeInput{
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-family: 'Courier New', Courier, monospace;
     width:fit-content;
+    height:2rem;
 }
 .buttonInput{
     color: rgb(117,117,117);
+    text-align:center;
 }
 
 #currentTime {
@@ -78,6 +80,10 @@ label{
     font-weight: bold;
     margin: 1rem;
     margin-top: 0.25rem;
+}
+#goButton{
+    height:2.5rem;
+    width:3rem;
 }
 
 /* Make the inputs look better by "connecting" where they touch */
@@ -107,7 +113,6 @@ label{
     border-top-width: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
 /* Disable focus highlighting */
