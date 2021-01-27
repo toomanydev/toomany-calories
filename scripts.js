@@ -12,16 +12,24 @@ var calorieConsumptions; // list of calories consumed after starting, i.e. exclu
 
 var updateInterval = 1000;
 var updateInstance;
+var updateCurrentTimeInstance;
 
 // Main
 main();
 function main() {
-
+    setupStartTime();
+    updateCurrentTime();
+    updateCurrentTimeInstance = setInterval(updateCurrentTime,1000);
 }
 
 // Events
 function update() {
-    console.log(getCalorieTarget());
+    console.log(getStartTime());
+}
+function updateCurrentTime() {
+    currentTime = new Date();
+    // TODO correct current time to be 1970, same data as default
+    setCurrentTime(currentTime.getHours(), currentTime.getMinutes());
 }
 function goButton(){
     clearInterval(updateInstance);
@@ -35,13 +43,14 @@ function updateOutputValues(){
     setCurrentTime();
     setAvailableCalories();
 }
-function setCurrentTime() {
-    document.getElementById("currentTime").value = currentTime;
+function setCurrentTime(hours, mins) {
+    var hoursCorrected = correctTimeDigits(hours);
+    var minsCorrected = correctTimeDigits(mins);
+    document.getElementById("currentTime").innerHTML = hoursCorrected+":"+minsCorrected;
 }
 function setAvailableCalories() {
     document.getElementById("calorieTarget").value = availableCalories;
 }
-
 
 // Intake values from UI
 function intakeInputValues(){
@@ -57,8 +66,22 @@ function getBreakfastCalories(){
     return document.getElementById("breakfastCalories").value;
 }
 function getStartTime(){
-    return document.getElementById("startTime").value;
+    return document.getElementById("startTime").valueAsDate;
 }
 function getBedTime(){
-    return document.getElementById("bedTime").value;
+    return document.getElementById("bedTime").valueAsDate;
+}
+
+// Setup Times
+function setupStartTime(){
+    
+}
+
+// Utility
+function correctTimeDigits(number){
+    if(number < 10) {
+        return "0"+number;
+    } else {
+        return number;
+    }
 }
