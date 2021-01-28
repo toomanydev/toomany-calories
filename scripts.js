@@ -45,7 +45,12 @@ function goButton() {
 
 function debugCommands() {
   console.log(getStartTime());
+  console.log(new Date());
   console.log(getBedTime());
+  const differenceStartBed = getBedTime() - getStartTime();
+  const differenceStartCurrent = new Date() - getStartTime();
+  console.log(`Time between start and bed: ${differenceStartBed / (1000 * 60 * 60)}`);
+  console.log(`Time between start and current: ${differenceStartCurrent / (1000 * 60 * 60)}`);
 }
 
 // Update UI
@@ -75,17 +80,18 @@ function getBreakfastCalories() {
   return document.getElementById('breakfastCalories').value;
 }
 function getStartTime() {
-  return correctTimeToCurrentDate(document.getElementById('startTime').valueAsDate);
+  let workingStartTime = correctTimeToCurrentDate(document.getElementById('startTime').valueAsDate);
+  workingStartTime = addMinutes(workingStartTime, workingStartTime.getTimezoneOffset()); // Fixes timezone discrepancy
+  return workingStartTime;
 }
 function getBedTime() {
-  const workingBedTime = correctTimeToCurrentDate(document.getElementById('bedTime').valueAsDate);
+  let workingBedTime = correctTimeToCurrentDate(document.getElementById('bedTime').valueAsDate);
+  workingBedTime = addMinutes(workingBedTime, workingBedTime.getTimezoneOffset()); // Fixes timezone discrepancy
   if (workingBedTime.getUTCHours() < getStartTime().getUTCHours()) {
     return new Date(workingBedTime.getUTCFullYear(), workingBedTime.getUTCMonth(), workingBedTime.getUTCDate() + 1,
       workingBedTime.getUTCHours(), workingBedTime.getUTCMinutes());
   }
   return workingBedTime;
-  // TODO test during DST? During DST changeover? make all internals UTC, apply timezone in/out (how to predict time zone DST, is that possible)?
-  // TODO getXTime is an hour ahead if DST. Changes time if different to UTC. tolocaltimestring also is wrong. Should only care about what is displayed.
 }
 
 // Utility
@@ -101,4 +107,10 @@ function correctTimeToCurrentDate(date) {
     return newTime;
   }
   return date;
+}
+
+function addMinutes(date, minutes) {
+  const returnDate = date;
+  returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
+  return returnDate;
 }
