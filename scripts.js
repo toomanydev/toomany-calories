@@ -17,7 +17,6 @@ let updateCurrentTimeInstance;
 // Main
 main();
 function main() {
-  setupStartTime();
   updateCurrentTime();
 
   // doesn't need to be used, is an interval
@@ -27,7 +26,7 @@ function main() {
 
 // Events
 function update() {
-  setupStartTime();
+
 }
 function updateCurrentTime() {
   setCurrentTime();
@@ -40,6 +39,11 @@ function goButton() {
   intakeInputValues();
   update();
   updateInstance = setInterval(update, updateInterval);
+  debugCommands();
+}
+
+function debugCommands() {
+  console.log(getBedTime());
 }
 
 // Update UI
@@ -69,27 +73,34 @@ function getBreakfastCalories() {
   return document.getElementById('breakfastCalories').value;
 }
 function getStartTime() {
-  return document.getElementById('startTime').valueAsDate;
+  return correctTimeToCurrentDate(document.getElementById('startTime').valueAsDate);
 }
 function getBedTime() {
-  return document.getElementById('bedTime').valueAsDate;
-}
-
-// Setup Times
-function setupStartTime() {
-  document.getElementById('startTime').valueAsDate = correctTimeToCurrentDate(getStartTime());
+  const workingBedTime = correctTimeToCurrentDate(document.getElementById('bedTime').valueAsDate);
+  if (workingBedTime.getUTCHours() < getStartTime().getUTCHours()) {
+    return new Date(workingBedTime.getFullYear(), workingBedTime.getMonth(), workingBedTime.getDate() + 1,
+      workingBedTime.getHours(), workingBedTime.getMinutes());
+  }
+  return workingBedTime;
+  // TODO test during DST? During DST changeover? make all internals UTC, apply timezone in/out (how to predict time zone DST, is that possible)?
 }
 
 // Utility
 function correctTimeToCurrentDate(date) {
-  const timeHours = date.getHours();
-  const timeMinutes = date.getMinutes();
-  const newTime = new Date();
-  newTime.setHours(timeHours);
-  newTime.setMinutes(timeMinutes);
-  newTime.setSeconds(0);
-  newTime.setMilliseconds(0);
-  return newTime;
+  if (date.getFullYear() === 1970) {
+    const timeHours = date.getUTCHours();
+    const timeMinutes = date.getUTCMinutes();
+    const newTime = new Date();
+    newTime.setUTCHours(timeHours);
+    newTime.setUTCMinutes(timeMinutes);
+    newTime.setSeconds(0);
+    newTime.setMilliseconds(0);
+    return newTime;
+  }
+  return date;
 }
 
-// crunch all times to same day? Only actually use hours, minutes specifically? If bedtime is lower is next day.
+function addDays(date, days) {
+  const newDate = new Date(date);
+  return newDate.setDate(newDate.getDate() + days);
+}
