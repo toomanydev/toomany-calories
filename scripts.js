@@ -78,8 +78,8 @@ function getStartTime() {
 function getBedTime() {
   const workingBedTime = correctTimeToCurrentDate(document.getElementById('bedTime').valueAsDate);
   if (workingBedTime.getUTCHours() < getStartTime().getUTCHours()) {
-    return new Date(workingBedTime.getFullYear(), workingBedTime.getMonth(), workingBedTime.getDate() + 1,
-      workingBedTime.getHours(), workingBedTime.getMinutes());
+    return new Date(workingBedTime.getUTCFullYear(), workingBedTime.getUTCMonth(), workingBedTime.getUTCDate() + 1,
+      workingBedTime.getUTCHours(), workingBedTime.getUTCMinutes());
   }
   return workingBedTime;
   // TODO test during DST? During DST changeover? make all internals UTC, apply timezone in/out (how to predict time zone DST, is that possible)?
