@@ -15,16 +15,19 @@ let updateInstance;
 let updateCurrentTimeInstance;
 
 // Main
+main();
 function main() {
   setupStartTime();
   updateCurrentTime();
+
+  // doesn't need to be used, is an interval
+  // eslint-disable-next-line no-unused-vars
   updateCurrentTimeInstance = setInterval(updateCurrentTime, 1000);
 }
-main();
 
 // Events
 function update() {
-  console.log(getStartTime());
+  setupStartTime();
 }
 function updateCurrentTime() {
   currentTime = new Date();
@@ -77,7 +80,8 @@ function getBedTime() {
 
 // Setup Times
 function setupStartTime() {
-  // crunch all times to same day? Only actually use hours, minutes specifically?
+  document.getElementById('startTime').valueAsDate = correctTimeToCurrentDate(getStartTime());
+  console.
 }
 
 // Utility
@@ -87,3 +91,15 @@ function correctTimeDigits(number) {
   }
   return number;
 }
+function correctTimeToCurrentDate(date) {
+  const timeHours = date.getHours();
+  const timeMinutes = date.getHours();
+  const newTime = new Date();
+  newTime.setHours(timeHours);
+  newTime.setMinutes(timeMinutes);
+  newTime.setSeconds(0);
+  newTime.setMilliseconds(0);
+  return newTime;
+}
+
+// crunch all times to same day? Only actually use hours, minutes specifically? If bedtime is lower is next day.
