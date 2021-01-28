@@ -44,6 +44,7 @@ function goButton() {
 }
 
 function debugCommands() {
+  console.log(getStartTime());
   console.log(getBedTime());
 }
 
