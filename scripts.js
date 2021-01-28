@@ -1,14 +1,15 @@
 // Variables
 let calorieTarget; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories; // calories that were consumed prior to starting the timer, e.g. breakfast.
+let calorieConsumptions; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
 
 let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
+
 let currentTime;
 
 let availableCalories;
-
-let calorieConsumptions; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
+let totalConsumedCalories;
 
 const updateInterval = 1000;
 let updateInstance;
@@ -83,6 +84,7 @@ function getBedTime() {
   }
   return workingBedTime;
   // TODO test during DST? During DST changeover? make all internals UTC, apply timezone in/out (how to predict time zone DST, is that possible)?
+  // TODO getXTime is an hour ahead if DST. Changes time if different to UTC. tolocaltimestring also is wrong. Should only care about what is displayed.
 }
 
 // Utility
@@ -98,9 +100,4 @@ function correctTimeToCurrentDate(date) {
     return newTime;
   }
   return date;
-}
-
-function addDays(date, days) {
-  const newDate = new Date(date);
-  return newDate.setDate(newDate.getDate() + days);
 }
