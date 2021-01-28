@@ -32,7 +32,7 @@ function update() {
 function updateCurrentTime() {
   currentTime = new Date();
   // TODO correct current time to be 1970, same data as default
-  setCurrentTime(currentTime.getHours(), currentTime.getMinutes());
+  setCurrentTime(currentTime);
 }
 
 // Used in HTML
@@ -49,10 +49,9 @@ function updateOutputValues() {
   setCurrentTime();
   setAvailableCalories();
 }
-function setCurrentTime(hours, mins) {
-  const hoursCorrected = correctTimeDigits(hours);
-  const minsCorrected = correctTimeDigits(mins);
-  document.getElementById('currentTime').innerHTML = `${hoursCorrected}:${minsCorrected}`;
+function setCurrentTime(date) {
+  currentTime = new Date();
+  document.getElementById('currentTime').innerHTML = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 function setAvailableCalories() {
   document.getElementById('calorieTarget').value = availableCalories;
@@ -81,19 +80,12 @@ function getBedTime() {
 // Setup Times
 function setupStartTime() {
   document.getElementById('startTime').valueAsDate = correctTimeToCurrentDate(getStartTime());
-  console.
 }
 
 // Utility
-function correctTimeDigits(number) {
-  if (number < 10) {
-    return `0${number}`;
-  }
-  return number;
-}
 function correctTimeToCurrentDate(date) {
   const timeHours = date.getHours();
-  const timeMinutes = date.getHours();
+  const timeMinutes = date.getMinutes();
   const newTime = new Date();
   newTime.setHours(timeHours);
   newTime.setMinutes(timeMinutes);
