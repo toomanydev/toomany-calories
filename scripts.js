@@ -30,9 +30,7 @@ function update() {
   setupStartTime();
 }
 function updateCurrentTime() {
-  currentTime = new Date();
-  // TODO correct current time to be 1970, same data as default
-  setCurrentTime(currentTime);
+  setCurrentTime();
 }
 
 // Used in HTML
@@ -49,7 +47,7 @@ function updateOutputValues() {
   setCurrentTime();
   setAvailableCalories();
 }
-function setCurrentTime(date) {
+function setCurrentTime() {
   currentTime = new Date();
   document.getElementById('currentTime').innerHTML = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
