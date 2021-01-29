@@ -30,13 +30,10 @@ function update() {
 
 }
 function updateCurrentTime() {
-  setCurrentTime();
+  setInnerHTMLDOM('currentTime', getCurrentTime().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 }
 
 // Primary logic
-function calculatePercentageTimePassed(){
-
-}
 
 // Used in HTML
 // eslint-disable-next-line no-unused-vars
@@ -49,78 +46,61 @@ function goButton() {
 }
 
 function debugCommands() {
-  console.log(getStartTime());
-  console.log(new Date());
-  console.log(getBedTime());
-  const differenceStartBed = getBedTime() - getStartTime();
-  const differenceStartCurrent = new Date() - getStartTime();
-  console.log(`Time between start and bed: ${differenceStartBed / (1000 * 60 * 60)}`);
-  console.log(`Time between start and current: ${differenceStartCurrent / (1000 * 60 * 60)}`);
+
 }
 
 // Update UI
 function updateOutputValues() {
-  setCurrentTime();
-  setAvailableCalories();
+  setValueDOM('calorieTarget', availableCalories);
 }
-function setCurrentTime() {
-  currentTime = new Date();
-  document.getElementById('currentTime').innerHTML = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+function setValueDOM(elementID, value) {
+  document.getElementById(elementID).value = value;
 }
-function setAvailableCalories() {
-  document.getElementById('calorieTarget').value = availableCalories;
+function setInnerHTMLDOM(elementID, innerHTML) {
+  document.getElementById(elementID).innerHTML = innerHTML;
 }
 
-// Intake values from UI
+
+// Intake values
 function intakeInputValues() {
-  calorieTarget = getCalorieTarget();
-  breakfastCalories = getBreakfastCalories();
-  startTime = getStartTime();
-  bedTime = getBedTime();
+  calorieTarget = getValueDOM('calorieTarget');
+  breakfastCalories = getValueDOM('breakfastCalories');
+  startTime = getTimeAsDisplayedDOM('startTime');
+  bedTime = getTimeAsDisplayedDOM('bedTime');
 }
-function getCalorieTarget() {
-  return document.getElementById('calorieTarget').value;
+function getValueDOM(elementID) {
+  return document.getElementById(elementID).value;
 }
-function getBreakfastCalories() {
-  return document.getElementById('breakfastCalories').value;
+function getTimeAsDisplayedDOM(elementID) {
+  let returnTime = correctTimeToSameDate(document.getElementById(elementID).valueAsDate);
+  returnTime = addMinutes(returnTime, returnTime.getTimezoneOffset()); // Fixes timezone discrepancy
+  return returnTime;
 }
-function getStartTime() {
-  let workingStartTime = correctTimeToCurrentDate(document.getElementById('startTime').valueAsDate);
-  workingStartTime = addMinutes(workingStartTime, workingStartTime.getTimezoneOffset()); // Fixes timezone discrepancy
-  return workingStartTime;
-}
-function getBedTime() {
-  let workingBedTime = correctTimeToCurrentDate(document.getElementById('bedTime').valueAsDate);
-  workingBedTime = addMinutes(workingBedTime, workingBedTime.getTimezoneOffset()); // Fixes timezone discrepancy
-  if (workingBedTime.getUTCHours() < getStartTime().getUTCHours()) {
-    return new Date(workingBedTime.getUTCFullYear(), workingBedTime.getUTCMonth(), workingBedTime.getUTCDate() + 1,
-      workingBedTime.getUTCHours(), workingBedTime.getUTCMinutes());
-  }
-  return workingBedTime;
+function getCurrentTime() {
+  return correctTimeToSameDate(new Date());
 }
 
 // Utility
-function correctTimeToCurrentDate(date) {
-  if (date.getFullYear() === 1970) {
-    const timeHours = date.getUTCHours();
-    const timeMinutes = date.getUTCMinutes();
-    const newTime = new Date();
-    newTime.setUTCHours(timeHours);
-    newTime.setUTCMinutes(timeMinutes);
-    newTime.setSeconds(0);
-    newTime.setMilliseconds(0);
-    return newTime;
-  }
-  return date;
+function correctTimeToSameDate(date) {
+  const timeHours = date.getUTCHours();
+  const timeMinutes = date.getUTCMinutes();
+  const newTime = new Date();
+  newTime.setUTCHours(timeHours);
+  newTime.setUTCMinutes(timeMinutes);
+  newTime.setSeconds(0);
+  newTime.setMilliseconds(0);
+  return newTime;
 }
-
 function addMinutes(date, minutes) {
   const returnDate = date;
   returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
   return returnDate;
 }
+function calculateHoursDifference(startDate, endDate) {
+  return (endDate - startDate) / (1000 * 60 * 60);
+}
 
 // TODO When current date moves into next day, startTime may jump forwards if gotten?
 // Perhaps if current time is before start time, it will miscompute due to start time being one day ahead? If so, implement checks for current time when setting day of start time
 // If we make the main logic of % time passed just hours and minutes, perhaps the other code correcting days will become redundant.
-// Reduce StartTime to zero, then if BedTime is negative subtract it from 24?
+// Reduce StartTime to zero, apply same subtraction to BedTime, then if BedTime is negative subtract it from 24?
