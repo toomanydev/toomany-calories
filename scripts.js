@@ -33,6 +33,11 @@ function updateCurrentTime() {
   setCurrentTime();
 }
 
+// Primary logic
+function calculatePercentageTimePassed(){
+  
+}
+
 // Used in HTML
 // eslint-disable-next-line no-unused-vars
 function goButton() {
@@ -114,3 +119,7 @@ function addMinutes(date, minutes) {
   returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
   return returnDate;
 }
+
+// TODO When current date moves into next day, startTime may jump forwards if gotten?
+// Perhaps if current time is before start time, it will miscompute due to start time being one day ahead? If so, implement checks for current time when setting day of start time
+// If we make the main logic of % time passed just hours and minutes, perhaps the other code correcting days will become redundant.
