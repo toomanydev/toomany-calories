@@ -1,6 +1,6 @@
 // Variables
-let calorieTarget; // the total amount of calories intended to be consumed during the day.
-let breakfastCalories; // calories that were consumed prior to starting the timer, e.g. breakfast.
+let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
+let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
 let calorieConsumptions; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
 
 let startTime; // the time the "go" button was first pressed, unless altered.
@@ -13,27 +13,27 @@ let totalConsumedCalories;
 
 const updateInterval = 1000;
 let updateInstance;
-let updateCurrentTimeInstance;
 
 // Main
 main();
 function main() {
-  updateCurrentTime();
+  update();
 
   // doesn't need to be used, is an interval
   // eslint-disable-next-line no-unused-vars
-  updateCurrentTimeInstance = setInterval(updateCurrentTime, 1000);
+  updateInstance = setInterval(update, 1000);
 }
 
 // Events
 function update() {
-
-}
-function updateCurrentTime() {
-  setInnerHTMLDOM('currentTime', getCurrentTime().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  updateOutputValues();
 }
 
 // Primary logic
+// if startTime is reduced to 0, we don't need to calculate it, just subtract it from bedTime;
+function alignBedTimeToStartTimeZero() {
+  return addMinutes(bedTime, -(startTime.getHours() * 60));
+}
 
 // Used in HTML
 // eslint-disable-next-line no-unused-vars
@@ -46,12 +46,13 @@ function goButton() {
 }
 
 function debugCommands() {
-
+  console.log(alignBedTimeToStartTimeZero());
 }
 
 // Update UI
 function updateOutputValues() {
-  setValueDOM('calorieTarget', availableCalories);
+  setValueDOM('availableCalories', availableCalories);
+  setInnerHTMLDOM('currentTime', getCurrentTime().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;
@@ -59,7 +60,6 @@ function setValueDOM(elementID, value) {
 function setInnerHTMLDOM(elementID, innerHTML) {
   document.getElementById(elementID).innerHTML = innerHTML;
 }
-
 
 // Intake values
 function intakeInputValues() {
@@ -72,21 +72,19 @@ function getValueDOM(elementID) {
   return document.getElementById(elementID).value;
 }
 function getTimeAsDisplayedDOM(elementID) {
-  let returnTime = correctTimeToSameDate(document.getElementById(elementID).valueAsDate);
-  returnTime = addMinutes(returnTime, returnTime.getTimezoneOffset()); // Fixes timezone discrepancy
-  return returnTime;
+  return document.getElementById(elementID).valueAsDate;
 }
 function getCurrentTime() {
-  return correctTimeToSameDate(new Date());
+  return new Date();
 }
 
 // Utility
 function correctTimeToSameDate(date) {
-  const timeHours = date.getUTCHours();
-  const timeMinutes = date.getUTCMinutes();
+  const timeHours = date.getHours();
+  const timeMinutes = date.getMinutes();
   const newTime = new Date();
-  newTime.setUTCHours(timeHours);
-  newTime.setUTCMinutes(timeMinutes);
+  newTime.setHours(timeHours);
+  newTime.setMinutes(timeMinutes);
   newTime.setSeconds(0);
   newTime.setMilliseconds(0);
   return newTime;
@@ -96,11 +94,9 @@ function addMinutes(date, minutes) {
   returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
   return returnDate;
 }
+function fixTimezoneDifference(date) {
+  return addMinutes(date, date.getTimezoneOffset());
+}
 function calculateHoursDifference(startDate, endDate) {
   return (endDate - startDate) / (1000 * 60 * 60);
 }
-
-// TODO When current date moves into next day, startTime may jump forwards if gotten?
-// Perhaps if current time is before start time, it will miscompute due to start time being one day ahead? If so, implement checks for current time when setting day of start time
-// If we make the main logic of % time passed just hours and minutes, perhaps the other code correcting days will become redundant.
-// Reduce StartTime to zero, apply same subtraction to BedTime, then if BedTime is negative subtract it from 24?
