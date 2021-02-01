@@ -12,23 +12,27 @@ let totalConsumedCalories;
 const updateInterval = 1000;
 let updateInstance;
 
-// Main
-main();
-function main() {
-  update();
-
-  // doesn't need to be used, is an interval
-  // eslint-disable-next-line no-unused-vars
-  updateInstance = setInterval(update, 1000);
-}
-
 // Events
 function update() {
+  availableCalories = getAvailableCalories();
   updateOutputValues();
 }
 
 // Primary logic
 // if startTime is reduced to 0, we don't need to calculate it, just subtract it from bedTime;
+
+function getCaloriesMinusBreakfast() {
+  return calorieTarget - breakfastCalories;
+}
+
+function getUnveiledCalories() {
+  return (getCaloriesMinusBreakfast() * Math.min(getTimePassed(startTime, getCurrentTime(), bedTime), 1));
+}
+
+function getAvailableCalories() {
+  // TODO: be able to subtract calories through Consume.
+  return Math.round(getUnveiledCalories());
+}
 
 function debugCommands() {
   console.log('startTime: ' + startTime);
@@ -37,6 +41,9 @@ function debugCommands() {
   console.log('Difference in mins: ' + timeToMinutes(alignTimeToZero(startTime, bedTime)));
   console.log('currentTime in mins: ' + timeToMinutes(alignTimeToZero(startTime, getCurrentTime())));
   console.log('% time passed: ' + getTimePassed(startTime, getCurrentTime(), bedTime));
+  console.log('Calories minus break: ' + getCaloriesMinusBreakfast());
+  console.log('Get unveailed kCal: ' + getUnveiledCalories());
+  console.log('Get available kCal: ' + getAvailableCalories());
 }
 
 // Used in HTML
@@ -51,7 +58,7 @@ function goButton() {
 
 // Update UI
 function updateOutputValues() {
-  setValueDOM('availableCalories', availableCalories);
+  setInnerHTMLDOM('availableCalories', availableCalories);
   setInnerHTMLDOM('currentTime', getCurrentTime().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 }
 function setValueDOM(elementID, value) {
@@ -96,9 +103,6 @@ function addMinutes(date, minutes) {
 }
 function fixTimezoneDifference(date) {
   return addMinutes(date, date.getTimezoneOffset());
-}
-function calculateHoursDifference(startDate, endDate) {
-  return (endDate - startDate) / (1000 * 60 * 60);
 }
 function timeToMinutes(date) {
   const dateHours = date.getHours();
