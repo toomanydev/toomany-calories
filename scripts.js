@@ -6,9 +6,7 @@ let calorieConsumptions; // list of calories consumed after starting, i.e. exclu
 let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
 
-let currentTime;
-
-let availableCalories;
+let availableCalories; // calorieTarget - totalConsumedCalories
 let totalConsumedCalories;
 
 const updateInterval = 1000;
@@ -31,8 +29,25 @@ function update() {
 
 // Primary logic
 // if startTime is reduced to 0, we don't need to calculate it, just subtract it from bedTime;
-function alignBedTimeToStartTimeZero() {
-  return addMinutes(bedTime, -(startTime.getHours() * 60));
+function alignTimeToZero(timeToZero, timeToAlign) {
+  // aligns the second time as though first time is at midnight, used for calculating difference in time.
+  let returnDate = new Date(timeToAlign);
+  returnDate = addMinutes(returnDate, -(timeToZero.getHours() * 60));
+  if (bedTime.getHours() < timeToZero.getHours()) {
+    returnDate = addMinutes(returnDate, 1440);
+  }
+  return returnDate;
+}
+
+
+
+function debugCommands() {
+  console.log('startTime: ' + startTime);
+  console.log('bedTime: ' + bedTime);
+  console.log('Difference: ' + alignTimeToZero(startTime, bedTime));
+  console.log('Difference in mins: ' + timeToMinutes(alignTimeToZero(startTime, bedTime)));
+  console.log('currentTime in mins: ' + timeToMinutes(alignTimeToZero(startTime, getCurrentTime())));
+  console.log('% time passed: ' + (timeToMinutes(alignTimeToZero(startTime, getCurrentTime())) / timeToMinutes(alignTimeToZero(startTime, bedTime))));
 }
 
 // Used in HTML
@@ -43,10 +58,6 @@ function goButton() {
   update();
   updateInstance = setInterval(update, updateInterval);
   debugCommands();
-}
-
-function debugCommands() {
-  console.log(alignBedTimeToStartTimeZero());
 }
 
 // Update UI
@@ -72,25 +83,25 @@ function getValueDOM(elementID) {
   return document.getElementById(elementID).value;
 }
 function getTimeAsDisplayedDOM(elementID) {
-  return document.getElementById(elementID).valueAsDate;
+  return fixTimezoneDifference(correctTimeToCurrentDate(document.getElementById(elementID).valueAsDate));
 }
 function getCurrentTime() {
   return new Date();
 }
 
 // Utility
-function correctTimeToSameDate(date) {
-  const timeHours = date.getHours();
-  const timeMinutes = date.getMinutes();
+function correctTimeToCurrentDate(date) {
+  const timeHours = date.getUTCHours();
+  const timeMinutes = date.getUTCMinutes();
   const newTime = new Date();
-  newTime.setHours(timeHours);
-  newTime.setMinutes(timeMinutes);
+  newTime.setUTCHours(timeHours);
+  newTime.setUTCMinutes(timeMinutes);
   newTime.setSeconds(0);
   newTime.setMilliseconds(0);
   return newTime;
 }
 function addMinutes(date, minutes) {
-  const returnDate = date;
+  const returnDate = new Date(date);
   returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
   return returnDate;
 }
@@ -99,4 +110,10 @@ function fixTimezoneDifference(date) {
 }
 function calculateHoursDifference(startDate, endDate) {
   return (endDate - startDate) / (1000 * 60 * 60);
+}
+function timeToMinutes(date) {
+  const dateHours = date.getHours();
+  let returnMinutes = date.getMinutes();
+  returnMinutes += (dateHours * 60);
+  return returnMinutes;
 }
