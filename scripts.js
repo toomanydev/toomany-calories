@@ -12,6 +12,11 @@ let totalConsumedCalories;
 const updateInterval = 1000;
 let updateInstance;
 
+main();
+function main() {
+  document.getElementById('consumeCalories').addEventListener('keypress', consumeCaloriesEnter);
+}
+
 // Events
 function update() {
   availableCalories = getAvailableCalories();
@@ -33,6 +38,7 @@ function getAvailableCalories() {
 
 function consumeCalories(calories) {
   calorieConsumptions.push({ calories });
+  update();
 }
 function getTotalConsumedCalories() {
   let totalCalories = 0;
@@ -64,9 +70,9 @@ function goButton() {
   updateInstance = setInterval(update, updateInterval);
   debugCommands();
 }
-// eslint-disable-next-line no-unused-vars
-function consumeCaloriesEnter() {
-  if(event.key === 'Enter') {
+
+function consumeCaloriesEnter(e) {
+  if (e.key === 'Enter') {
     consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
   }
 }
