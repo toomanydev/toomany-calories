@@ -49,19 +49,6 @@ function getTotalConsumedCalories() {
   return totalCalories;
 }
 
-function debugCommands() {
-  console.log(`startTime: ${startTime}`);
-  console.log(`bedTime: ${bedTime}`);
-  console.log(`Difference: ${alignTimeToZero(startTime, bedTime)}`);
-  console.log(`Difference in mins: ${timeToMinutes(alignTimeToZero(startTime, bedTime))}`);
-  console.log(`currentTime in mins: ${timeToMinutes(alignTimeToZero(startTime, getCurrentTime()))}`);
-  console.log(`% time passed: ${getTimePassed(startTime, getCurrentTime(), bedTime)}`);
-  console.log(`Calories minus break: ${getCaloriesMinusBreakfast()}`);
-  console.log(`Get unveailed kCal: ${getUnveiledCalories()}`);
-  console.log(`Get consumed kCal: ${getTotalConsumedCalories()}`);
-  console.log(`Get available kCal: ${getAvailableCalories()}`);
-}
-
 // Used in HTML
 // eslint-disable-next-line no-unused-vars
 function goButton() {
@@ -69,7 +56,6 @@ function goButton() {
   intakeInputValues();
   update();
   updateInstance = setInterval(update, updateInterval);
-  debugCommands();
 }
 
 function consumeCaloriesEnter(e) {
