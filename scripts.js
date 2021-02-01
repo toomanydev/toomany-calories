@@ -65,6 +65,7 @@ function goButton() {
 function consumeCaloriesEnter(e) {
   if (e.key === 'Enter') {
     if (!Number.isNaN(parseInt(getValueDOM('consumeCalories'), 10))) {
+      goButton();
       consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
       setValueDOM('consumeCalories', null);
     }
