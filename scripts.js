@@ -24,22 +24,22 @@ function update() {
 function getCaloriesMinusBreakfast() {
   return calorieTarget - breakfastCalories;
 }
-
 function getUnveiledCalories() {
   return (getCaloriesMinusBreakfast() * Math.min(getTimePassed(startTime, getCurrentTime(), bedTime), 1));
 }
+function getAvailableCalories() {
+  return Math.round((getUnveiledCalories() - getTotalConsumedCalories()));
+}
 
+function consumeCalories(calories) {
+  calorieConsumptions.push({ calories });
+}
 function getTotalConsumedCalories() {
   let totalCalories = 0;
   for (let i = 0; i < calorieConsumptions.length; i += 1) {
-    totalCalories += calorieConsumptions[i];
+    totalCalories += calorieConsumptions[i].calories;
   }
   return totalCalories;
-}
-
-function getAvailableCalories() {
-  // TODO: be able to subtract calories through Consume.
-  return Math.round(getUnveiledCalories());
 }
 
 function debugCommands() {
@@ -51,6 +51,7 @@ function debugCommands() {
   console.log(`% time passed: ${getTimePassed(startTime, getCurrentTime(), bedTime)}`);
   console.log(`Calories minus break: ${getCaloriesMinusBreakfast()}`);
   console.log(`Get unveailed kCal: ${getUnveiledCalories()}`);
+  console.log(`Get consumed kCal: ${getTotalConsumedCalories()}`);
   console.log(`Get available kCal: ${getAvailableCalories()}`);
 }
 
@@ -64,8 +65,10 @@ function goButton() {
   debugCommands();
 }
 // eslint-disable-next-line no-unused-vars
-function consumeCalories(calories) {
-  calorieConsumptions.push({ calories });
+function consumeCaloriesEnter() {
+  if(event.key === 'Enter') {
+    consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
+  }
 }
 
 // Update UI
