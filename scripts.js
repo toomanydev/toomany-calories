@@ -1,7 +1,7 @@
 // TODO: remember settings in cookies, add total calories consumed display, remove current time.
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
-const calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
+let calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
 
 let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
@@ -17,12 +17,8 @@ function main() {
     .getElementById('consumeCalories')
     .addEventListener('keypress', consumeCaloriesEnter);
   document.getElementById('goButton').addEventListener('click', goButton);
-}
-
-// Events
-function update() {
-  availableCalories = getAvailableCalories();
-  updateOutputValues();
+  document.getElementById('consumeResetButton').addEventListener('click', consumeResetButton);
+  window.onbeforeunload = userLeaving;
 }
 
 // Primary logic
@@ -53,6 +49,15 @@ function getTotalConsumedCalories() {
   return totalCalories;
 }
 
+// Events
+function update() {
+  availableCalories = getAvailableCalories();
+  updateOutputValues();
+}
+function userLeaving() {
+  return '';
+}
+
 // Used in HTML
 // eslint-disable-next-line no-unused-vars
 function goButton() {
@@ -70,6 +75,11 @@ function consumeCaloriesEnter(e) {
       setValueDOM('consumeCalories', null);
     }
   }
+}
+
+function consumeResetButton() {
+  calorieConsumptions = [];
+  update();
 }
 
 // Update UI
