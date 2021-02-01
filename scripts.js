@@ -7,14 +7,15 @@ let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
 
 let availableCalories; // calorieTarget - totalConsumedCalories
-let totalConsumedCalories;
 
 const updateInterval = 1000;
 let updateInstance;
 
 main();
 function main() {
-  document.getElementById('consumeCalories').addEventListener('keypress', consumeCaloriesEnter);
+  document
+    .getElementById('consumeCalories')
+    .addEventListener('keypress', consumeCaloriesEnter);
   document.getElementById('goButton').addEventListener('click', goButton);
 }
 
@@ -31,10 +32,13 @@ function getCaloriesMinusBreakfast() {
   return calorieTarget - breakfastCalories;
 }
 function getUnveiledCalories() {
-  return (getCaloriesMinusBreakfast() * Math.min(getTimePassed(startTime, getCurrentTime(), bedTime), 1));
+  return (
+    getCaloriesMinusBreakfast()
+    * Math.min(getTimePassed(startTime, getCurrentTime(), bedTime), 1)
+  );
 }
 function getAvailableCalories() {
-  return Math.round((getUnveiledCalories() - getTotalConsumedCalories()));
+  return Math.round(getUnveiledCalories() - getTotalConsumedCalories());
 }
 
 function consumeCalories(calories) {
@@ -70,7 +74,13 @@ function consumeCaloriesEnter(e) {
 // Update UI
 function updateOutputValues() {
   setInnerHTMLDOM('availableCalories', availableCalories);
-  setInnerHTMLDOM('currentTime', getCurrentTime().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  setInnerHTMLDOM(
+    'currentTime',
+    getCurrentTime().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+  );
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;
@@ -90,7 +100,9 @@ function getValueDOM(elementID) {
   return document.getElementById(elementID).value;
 }
 function getTimeAsDisplayedDOM(elementID) {
-  return fixTimezoneDifference(correctTimeToCurrentDate(document.getElementById(elementID).valueAsDate));
+  return fixTimezoneDifference(
+    correctTimeToCurrentDate(document.getElementById(elementID).valueAsDate),
+  );
 }
 function getCurrentTime() {
   return new Date();
@@ -109,7 +121,7 @@ function correctTimeToCurrentDate(date) {
 }
 function addMinutes(date, minutes) {
   const returnDate = new Date(date);
-  returnDate.setTime(date.getTime() + (minutes * 60 * 1000));
+  returnDate.setTime(date.getTime() + minutes * 60 * 1000);
   return returnDate;
 }
 function fixTimezoneDifference(date) {
@@ -118,11 +130,14 @@ function fixTimezoneDifference(date) {
 function timeToMinutes(date) {
   const dateHours = date.getHours();
   let returnMinutes = date.getMinutes();
-  returnMinutes += (dateHours * 60);
+  returnMinutes += dateHours * 60;
   return returnMinutes;
 }
 function getTimePassed(timeToZero, currentTime, endTime) {
-  return timeToMinutes(alignTimeToZero(timeToZero, getCurrentTime())) / timeToMinutes(alignTimeToZero(timeToZero, endTime));
+  return (
+    timeToMinutes(alignTimeToZero(timeToZero, getCurrentTime()))
+    / timeToMinutes(alignTimeToZero(timeToZero, endTime))
+  );
 }
 function alignTimeToZero(timeToZero, timeToAlign) {
   // aligns the second time as though first time is at midnight, used for calculating difference in time.
