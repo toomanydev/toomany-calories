@@ -29,19 +29,6 @@ function update() {
 
 // Primary logic
 // if startTime is reduced to 0, we don't need to calculate it, just subtract it from bedTime;
-function alignTimeToZero(timeToZero, timeToAlign) {
-  // aligns the second time as though first time is at midnight, used for calculating difference in time.
-  let returnDate = new Date(timeToAlign);
-  returnDate = addMinutes(returnDate, -(timeToZero.getHours() * 60));
-  if (bedTime.getHours() < timeToZero.getHours()) {
-    returnDate = addMinutes(returnDate, 1440);
-  }
-  return returnDate;
-}
-
-function getTimePassed(timeToZero, currentTime, endTime) {
-  return timeToMinutes(alignTimeToZero(timeToZero, getCurrentTime())) / timeToMinutes(alignTimeToZero(timeToZero, endTime));
-}
 
 function debugCommands() {
   console.log('startTime: ' + startTime);
@@ -118,4 +105,16 @@ function timeToMinutes(date) {
   let returnMinutes = date.getMinutes();
   returnMinutes += (dateHours * 60);
   return returnMinutes;
+}
+function getTimePassed(timeToZero, currentTime, endTime) {
+  return timeToMinutes(alignTimeToZero(timeToZero, getCurrentTime())) / timeToMinutes(alignTimeToZero(timeToZero, endTime));
+}
+function alignTimeToZero(timeToZero, timeToAlign) {
+  // aligns the second time as though first time is at midnight, used for calculating difference in time.
+  let returnDate = new Date(timeToAlign);
+  returnDate = addMinutes(returnDate, -(timeToZero.getHours() * 60));
+  if (bedTime.getHours() < timeToZero.getHours()) {
+    returnDate = addMinutes(returnDate, 1440);
+  }
+  return returnDate;
 }
