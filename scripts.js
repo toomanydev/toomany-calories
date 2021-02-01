@@ -39,7 +39,9 @@ function alignTimeToZero(timeToZero, timeToAlign) {
   return returnDate;
 }
 
-
+function getTimePassed(timeToZero, currentTime, endTime) {
+  return timeToMinutes(alignTimeToZero(timeToZero, getCurrentTime())) / timeToMinutes(alignTimeToZero(timeToZero, endTime));
+}
 
 function debugCommands() {
   console.log('startTime: ' + startTime);
@@ -47,7 +49,7 @@ function debugCommands() {
   console.log('Difference: ' + alignTimeToZero(startTime, bedTime));
   console.log('Difference in mins: ' + timeToMinutes(alignTimeToZero(startTime, bedTime)));
   console.log('currentTime in mins: ' + timeToMinutes(alignTimeToZero(startTime, getCurrentTime())));
-  console.log('% time passed: ' + (timeToMinutes(alignTimeToZero(startTime, getCurrentTime())) / timeToMinutes(alignTimeToZero(startTime, bedTime))));
+  console.log('% time passed: ' + getTimePassed(startTime, getCurrentTime(), bedTime));
 }
 
 // Used in HTML
