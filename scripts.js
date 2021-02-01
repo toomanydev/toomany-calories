@@ -1,4 +1,4 @@
-// TODO: remember settings in cookies, add total calories consumed display, remove current time.
+// TODO: remember settings in cookies, add total calories consumed display, remove current time, remove Go button (update on change)
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
 let calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
