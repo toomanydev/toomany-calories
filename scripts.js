@@ -74,7 +74,10 @@ function goButton() {
 
 function consumeCaloriesEnter(e) {
   if (e.key === 'Enter') {
-    consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
+    if (!Number.isNaN(parseInt(getValueDOM('consumeCalories'), 10))) {
+      consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
+      setValueDOM('consumeCalories', null);
+    }
   }
 }
 
