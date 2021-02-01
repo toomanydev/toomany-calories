@@ -15,6 +15,7 @@ let updateInstance;
 main();
 function main() {
   document.getElementById('consumeCalories').addEventListener('keypress', consumeCaloriesEnter);
+  document.getElementById('goButton').addEventListener('click', goButton);
 }
 
 // Events
