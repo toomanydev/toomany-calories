@@ -1,7 +1,7 @@
 // Variables
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
-let calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
+const calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
 
 let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
@@ -29,6 +29,14 @@ function getUnveiledCalories() {
   return (getCaloriesMinusBreakfast() * Math.min(getTimePassed(startTime, getCurrentTime(), bedTime), 1));
 }
 
+function getTotalConsumedCalories() {
+  let totalCalories = 0;
+  for (let i = 0; i < calorieConsumptions.length; i += 1) {
+    totalCalories += calorieConsumptions[i];
+  }
+  return totalCalories;
+}
+
 function getAvailableCalories() {
   // TODO: be able to subtract calories through Consume.
   return Math.round(getUnveiledCalories());
@@ -54,6 +62,10 @@ function goButton() {
   update();
   updateInstance = setInterval(update, updateInterval);
   debugCommands();
+}
+// eslint-disable-next-line no-unused-vars
+function consumeCalories(calories) {
+  calorieConsumptions.push({ calories });
 }
 
 // Update UI
