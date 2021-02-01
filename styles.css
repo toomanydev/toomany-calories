@@ -87,6 +87,10 @@ label{
     height:2.5rem;
     width:4rem;
 }
+#consumeResetButton{
+    padding: 0 1rem;
+    height: 2.5rem;
+}
 
 /* Make the inputs look better by "connecting" where they touch */
 #calorieTarget{
@@ -111,7 +115,7 @@ label{
     border-left-width: 0;
     border-bottom-left-radius: 0;
 }
-#goButton{
+#goButton, #consumeResetButton{
     border-top-width: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
