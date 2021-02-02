@@ -6,8 +6,6 @@ let calorieConsumptions = []; // list of calories consumed after starting, i.e. 
 let startTime; // the time the "go" button was first pressed, unless altered.
 let bedTime; // the time at which all calories will be made available.
 
-let availableCalories; // calorieTarget - totalConsumedCalories
-
 const updateInterval = 1000;
 let updateInstance;
 
@@ -36,6 +34,13 @@ function getUnveiledCalories() {
 function getAvailableCalories() {
   return Math.round(getUnveiledCalories() - getTotalConsumedCalories());
 }
+function getUnavailableCalories() {
+  let unavailableCalories = calorieTarget;
+  unavailableCalories -= breakfastCalories;
+  unavailableCalories -= getTotalConsumedCalories();
+
+  return unavailableCalories;
+}
 
 function consumeCalories(calories) {
   calorieConsumptions.push({ calories });
@@ -51,7 +56,6 @@ function getTotalConsumedCalories() {
 
 // Events
 function update() {
-  availableCalories = getAvailableCalories();
   updateOutputValues();
 }
 function userLeaving() {
@@ -84,14 +88,8 @@ function consumeResetButton() {
 
 // Update UI
 function updateOutputValues() {
-  setInnerHTMLDOM('availableCalories', availableCalories);
-  setInnerHTMLDOM(
-    'currentTime',
-    getCurrentTime().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  );
+  setInnerHTMLDOM('availableCalories', getAvailableCalories());
+  setInnerHTMLDOM('unavailableCalories', getUnavailableCalories());
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;

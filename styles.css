@@ -73,13 +73,13 @@ label{
     text-align:center;
 }
 
-#currentTime {
-    margin: 1rem;
-    margin-bottom: 0.25rem;
-}
 #availableCalories{
     font-size: 2em;
     font-weight: bold;
+    margin: 1rem;
+    margin-bottom: 0.25rem;
+}
+#unavailableCalories{
     margin: 1rem;
     margin-top: 0.25rem;
 }
