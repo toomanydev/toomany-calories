@@ -34,7 +34,7 @@ function getUnveiledCalories() {
 function getAvailableCalories() {
   return Math.round(getUnveiledCalories() - getTotalConsumedCalories());
 }
-function getUnavailableCalories() {
+function getTotalAvailableCalories() {
   let unavailableCalories = calorieTarget;
   unavailableCalories -= breakfastCalories;
   unavailableCalories -= getTotalConsumedCalories();
@@ -89,7 +89,7 @@ function consumeResetButton() {
 // Update UI
 function updateOutputValues() {
   setInnerHTMLDOM('availableCalories', getAvailableCalories());
-  setInnerHTMLDOM('unavailableCalories', getUnavailableCalories());
+  setInnerHTMLDOM('totalAvailableCalories', getTotalAvailableCalories());
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;
