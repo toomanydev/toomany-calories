@@ -1,4 +1,4 @@
-// TODO: remember settings in cookies, optional show calorie consumptions, respect minutes. remove Go button (update on change)
+// TODO: remember settings in cookies, optional show calorie consumptions. remove Go button (update on change)
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
 let calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
@@ -151,8 +151,10 @@ function getTimePassed(timeToZero, currentTime, endTime) {
 function alignTimeToZero(timeToZero, timeToAlign) {
   // aligns the second time as though first time is at midnight, used for calculating difference in time.
   let returnDate = new Date(timeToAlign);
-  returnDate = addMinutes(returnDate, -(timeToZero.getHours() * 60));
-  if (bedTime.getHours() < timeToZero.getHours()) {
+  const timeToZeroInMinutes = (timeToZero.getHours() * 60) + timeToZero.getMinutes();
+  returnDate = addMinutes(returnDate, -(timeToZeroInMinutes));
+  const timeToAlignInMinutes = (timeToAlign.getHours() * 60) + timeToAlign.getMinutes();
+  if (timeToAlignInMinutes < timeToZeroInMinutes) {
     returnDate = addMinutes(returnDate, 1440);
   }
   return returnDate;
