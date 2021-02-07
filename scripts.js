@@ -1,5 +1,5 @@
-// TODO: remember settings in cookies, optionally show calorie consumptions, remember consumptions before reset for undo
-// UNSURE: remove Go button (update on change)
+// TODO: optionally show calorie consumptions, remember consumptions before reset for undo
+// UNSURE: remove Go button (update on change).
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
 let calorieConsumptions = []; // list of calories consumed after starting, i.e. excluding alreadyConsumed.
@@ -17,7 +17,11 @@ function main() {
     .addEventListener('keypress', consumeCaloriesEnter);
   document.getElementById('goButton').addEventListener('click', goButton);
   document.getElementById('consumeResetButton').addEventListener('click', consumeResetButton);
+
   window.onbeforeunload = userLeaving;
+
+  getAllLocalStorage();
+  updateInputValues();
 }
 
 // Primary logic
@@ -68,29 +72,55 @@ function userLeaving() {
 function goButton() {
   clearInterval(updateInstance);
   intakeInputValues();
+  storeAllLocalStorage();
   update();
   updateInstance = setInterval(update, updateInterval);
 }
-
 function consumeCaloriesEnter(e) {
   if (e.key === 'Enter') {
     if (!Number.isNaN(parseInt(getValueDOM('consumeCalories'), 10))) {
-      goButton();
       consumeCalories(parseInt(getValueDOM('consumeCalories'), 10));
       setValueDOM('consumeCalories', null);
+      goButton();
     }
   }
 }
-
 function consumeResetButton() {
   calorieConsumptions = [];
-  update();
+  goButton();
+}
+
+// Provide persistance
+function storeAllLocalStorage() {
+  localStorage.setItem('calorieTarget', calorieTarget);
+  localStorage.setItem('breakfastCalories', breakfastCalories);
+  localStorage.setItem('startTime', startTime);
+  localStorage.setItem('bedTime', bedTime);
+  localStorage.setItem('calorieConsumptions', JSON.stringify(calorieConsumptions));
+}
+
+function getAllLocalStorage() {
+  calorieTarget = localStorage.getItem('calorieTarget');
+  breakfastCalories = localStorage.getItem('breakfastCalories');
+  startTime = new Date(localStorage.getItem('startTime'));
+  bedTime = new Date(localStorage.getItem('bedTime'));
+
+  const calorieConsumptionsJSON = JSON.parse(localStorage.getItem('calorieConsumptions'));
+  if (calorieConsumptionsJSON.length !== 0) {
+    calorieConsumptions = JSON.parse(localStorage.getItem('calorieConsumptions'));
+  }
 }
 
 // Update UI
 function updateOutputValues() {
   setInnerHTMLDOM('availableCalories', getAvailableCalories());
   setInnerHTMLDOM('totalAvailableCalories', getTotalAvailableCalories());
+}
+function updateInputValues() {
+  setValueDOM('calorieTarget', calorieTarget);
+  setValueDOM('breakfastCalories', breakfastCalories);
+  setValueDOM('startTime', startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  setValueDOM('bedTime', bedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;
