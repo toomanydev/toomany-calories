@@ -20,6 +20,9 @@ function main() {
 
   window.onbeforeunload = userLeaving;
 
+  if (localStorage.getItem('calorieTarget') === null) {
+    storeAllLocalStorage();
+  }
   getAllLocalStorage();
   updateInputValues();
 }
@@ -92,6 +95,7 @@ function consumeResetButton() {
 
 // Provide persistance
 function storeAllLocalStorage() {
+  intakeInputValues();
   localStorage.setItem('calorieTarget', calorieTarget);
   localStorage.setItem('breakfastCalories', breakfastCalories);
   localStorage.setItem('startTime', startTime);
