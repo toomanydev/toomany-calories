@@ -115,13 +115,14 @@ function getAllLocalStorage() {
 function updateOutputValues() {
   setInnerHTMLDOM('availableCalories', getAvailableCalories());
   setInnerHTMLDOM('totalAvailableCalories', getTotalAvailableCalories());
-  setInnerHTMLDOM('consumeCaloriesLabel', "Consumed ("+getTotalConsumedCalories()+")");
+  setInnerHTMLDOM('consumeCaloriesLabel', `Consumed (${getTotalConsumedCalories()})`);
 }
 function updateInputValues() {
   setValueDOM('calorieTarget', calorieTarget);
   setValueDOM('breakfastCalories', breakfastCalories);
   setValueDOM('startTime', startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
   setValueDOM('bedTime', bedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  setInnerHTMLDOM('consumeCaloriesLabel', `Consumed (${getTotalConsumedCalories()})`);
 }
 function setValueDOM(elementID, value) {
   document.getElementById(elementID).value = value;
