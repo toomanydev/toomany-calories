@@ -20,6 +20,9 @@ function main() {
 
   window.onbeforeunload = userLeaving;
 
+  if (localStorage.getItem('calorieTarget') === null) {
+    storeAllLocalStorage();
+  }
   getAllLocalStorage();
   updateInputValues();
 }
