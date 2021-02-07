@@ -115,6 +115,7 @@ function getAllLocalStorage() {
 function updateOutputValues() {
   setInnerHTMLDOM('availableCalories', getAvailableCalories());
   setInnerHTMLDOM('totalAvailableCalories', getTotalAvailableCalories());
+  setInnerHTMLDOM('consumeCaloriesLabel', "Consumed ("+getTotalConsumedCalories()+")");
 }
 function updateInputValues() {
   setValueDOM('calorieTarget', calorieTarget);
