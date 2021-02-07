@@ -1,4 +1,4 @@
-// TODO: optionally show calorie consumptions, remember consumptions before reset for undo
+// TODO: optionally show individual calorie consumptions in a list, remember consumptions before reset for undo
 // UNSURE: remove Go button (update on change).
 let calorieTarget = 0; // the total amount of calories intended to be consumed during the day.
 let breakfastCalories = 0; // calories that were consumed prior to starting the timer, e.g. breakfast.
